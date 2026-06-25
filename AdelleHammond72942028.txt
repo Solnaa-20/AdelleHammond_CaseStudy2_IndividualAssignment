@@ -1,0 +1,263 @@
+Adelle Solange Naa Ayele Hammond
+72942028
+Cohort C
+
+Enter password: ******
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 3
+Server version: 12.2.2-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> CREATE DATABASE Projects;
+Query OK, 1 row affected (0.011 sec)
+
+MariaDB [(none)]> USE Projects;
+Database changed
+MariaDB [Projects]> CREATE TABLE Department(deptNo VARCHAR(10) PRIMARY KEY,deptName VARCHAR(30), mgrEmpNo INT );
+Query OK, 0 rows affected (0.062 sec)
+
+MariaDB [Projects]>  CREATE TABLE Employee(empNo VARCHAR(10) PRIMARY KEY,fName VARCHAR(30),lName VARCHAR(30),address VARCHAR(50), DOB DATE,sex CHAR(1),position VARCHAR(30),deptNo VARCHAR(10), FOREIGN KEY (deptNo) REFERENCES Department(deptNo), CONSTRAINT chk_sex CHECK (sex IN('M','F')), CONSTRAINT chk_position CHECK (position IN('Manager','Team Leader','Analyst','Software Developer')));
+Query OK, 0 rows affected (0.028 sec)
+
+MariaDB [Projects]> CREATE TABLE Project(projNo VARCHAR(10) PRIMARY KEY, projName VARCHAR(40),deptNo VARCHAR(10), FOREIGN KEY (deptNo) REFERENCES Department(deptNo));
+Query OK, 0 rows affected (0.018 sec)
+
+MariaDB [Projects]> CREATE TABLE WorksOn(empNo VARCHAR(10),projNo VARCHAR(10),dateWorked DATE,hoursWorked INT,PRIMARY KEY(empNo,projNo,dateWorked), FOREIGN KEY (empNo) REFERENCES Employee(empNo),FOREIGN KEY (projNo) REFERENCES Project(projNo), CONSTRAINT chk_hoursWorked CHECK (hoursWorked >=0 AND hoursWorked <= 40));
+Query OK, 0 rows affected (0.022 sec)
+
+MariaDB [Projects]> ALTER TABLE Department ADD CONSTRAINT fk_manager FOREIGN KEY (mgrEmpNo) REFERENCES Employee(empNo);
+Query OK, 0 rows affected (0.059 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> SET FOREIGN_KEY_CHECKS=0;
+Query OK, 0 rows affected (0.026 sec)
+
+MariaDB [Projects]> INSERT INTO Department (deptNo, deptName, mgrEmpNo) VALUES
+    -> ('D1', 'Executive', 'E1'),
+    -> ('D2', 'Human Resources', 'E2'),
+    -> ('D3', 'Software Development', 'E3'),
+    -> ('D4', 'Data Analytics', 'E5'),
+    -> ('D5', 'Project Management', 'E4'),
+    -> ('D6', 'Quality Assurance', 'E7'),
+    -> ('D7', 'IT Support', 'E9'),
+    -> ('D8', 'Research & Development', 'E6'),
+    -> ('D9', 'Marketing', 'E8'),
+    -> ('D10', 'Finance', 'E10');
+Query OK, 10 rows affected (0.037 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> INSERT INTO Employee (empNo, fName, lName, address, DOB, sex, position, deptNo) VALUES
+    -> ('E1', 'Alice', 'Smith', '123 Maple St, London', '1980-05-12', 'F', 'Manager', 'D1'),
+    -> ('E2', 'Bob', 'Jones', '456 Oak Rd, Manchester', '1985-08-22', 'M', 'Manager', 'D2'),
+    -> ('E3', 'Charlie', 'Brown', '789 Pine Ave, Bristol', '1988-11-02', 'M', 'Manager', 'D3'),
+    -> ('E4', 'Diana', 'Prince', '101 Cedar Ln, Leeds', '1990-03-15', 'F', 'Manager', 'D5'),
+    -> ('E5', 'Evan', 'Wright', '202 Birch Dr, Liverpool', '1992-07-19', 'M', 'Manager', 'D4'),
+    -> ('E6', 'Fiona', 'Gallagher', '303 Elm St, Newcastle', '1991-01-30', 'F', 'Team Leader', 'D8'),
+    -> ('E7', 'George', 'Clark', '404 Willow Rd, Sheffield', '1993-09-05', 'M', 'Team Leader', 'D6'),
+    -> ('E8', 'Hannah', 'Abbott', '505 Ash Blvd, Nottingham', '1994-04-25', 'F', 'Analyst', 'D9'),
+    -> ('E9', 'Ian', 'Malcolm', '606 Walnut Ter, Leicester', '1987-12-11', 'M', 'Software Developer', 'D7'),
+    -> ('E10', 'Julia', 'Roberts', '707 Chestnut Ct, Southampton', '1989-06-14', 'F', 'Analyst', 'D10');
+Query OK, 10 rows affected (0.034 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> INSERT INTO Project (projNo, projName, deptNo) VALUES
+    -> ('SCCS', 'Corporate Restructuring', 'D1'),
+    -> ('P2', 'Talent Acquisition 2026', 'D2'),
+    -> ('P3', 'E-Commerce Platform Redesign', 'D3'),
+    -> ('P4', 'Predictive Market Analytics', 'D4'),
+    -> ('P5', 'Agile Workflow Optimization', 'D5'),
+    -> ('P6', 'Automated Regression Testing', 'D6'),
+    -> ('P7', 'Cloud Infrastructure Migration', 'D7'),
+    -> ('P8', 'Next-Gen Core Engine R&D', 'D8'),
+    -> ('P9', 'Global Brand Campaign', 'D9'),
+    -> ('P10', 'Fiscal Q3 Audit Prep', 'D10');
+Query OK, 10 rows affected (0.037 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> INSERT INTO WorksOn (empNo, projNo, dateWorked, hoursWorked) VALUES
+    -> ('E1', 'SCCS', '2026-06-01', 35),
+    -> ('E2', 'P2', '2026-06-01', 40),
+    -> ('E3', 'P3', '2026-06-02', 38),
+    -> ('E4', 'P5', '2026-06-02', 20),
+    -> ('E5', 'P4', '2026-06-03', 15),
+    -> ('E6', 'P8', '2026-06-03', 40),
+    -> ('E7', 'P6', '2026-06-04', 30),
+    -> ('E8', 'P9', '2026-06-04', 25),
+    -> ('E9', 'P7', '2026-06-05', 40),
+    -> ('E10', 'P10', '2026-06-05', 10);
+Query OK, 10 rows affected (0.037 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [Projects]> SET FOREIGN_KEY_CHECKS = 1;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [Projects]> SELECT * FROM Department;
++--------+------------------------+----------+
+| deptNo | deptName               | mgrEmpNo |
++--------+------------------------+----------+
+| D1     | Executive              | E1       |
+| D10    | Finance                | E10      |
+| D2     | Human Resources        | E2       |
+| D3     | Software Development   | E3       |
+| D4     | Data Analytics         | E5       |
+| D5     | Project Management     | E4       |
+| D6     | Quality Assurance      | E7       |
+| D7     | IT Support             | E9       |
+| D8     | Research & Development | E6       |
+| D9     | Marketing              | E8       |
++--------+------------------------+----------+
+10 rows in set (0.013 sec)
+
+MariaDB [Projects]> SELECT * FROM Employee;
++-------+---------+-----------+------------------------------+------------+------+--------------------+--------+
+| empNo | fName   | lName     | address                      | DOB        | sex  | position           | deptNo |
++-------+---------+-----------+------------------------------+------------+------+--------------------+--------+
+| E1    | Alice   | Smith     | 123 Maple St, London         | 1980-05-12 | F    | Manager            | D1     |
+| E10   | Julia   | Roberts   | 707 Chestnut Ct, Southampton | 1989-06-14 | F    | Analyst            | D10    |
+| E2    | Bob     | Jones     | 456 Oak Rd, Manchester       | 1985-08-22 | M    | Manager            | D2     |
+| E3    | Charlie | Brown     | 789 Pine Ave, Bristol        | 1988-11-02 | M    | Manager            | D3     |
+| E4    | Diana   | Prince    | 101 Cedar Ln, Leeds          | 1990-03-15 | F    | Manager            | D5     |
+| E5    | Evan    | Wright    | 202 Birch Dr, Liverpool      | 1992-07-19 | M    | Manager            | D4     |
+| E6    | Fiona   | Gallagher | 303 Elm St, Newcastle        | 1991-01-30 | F    | Team Leader        | D8     |
+| E7    | George  | Clark     | 404 Willow Rd, Sheffield     | 1993-09-05 | M    | Team Leader        | D6     |
+| E8    | Hannah  | Abbott    | 505 Ash Blvd, Nottingham     | 1994-04-25 | F    | Analyst            | D9     |
+| E9    | Ian     | Malcolm   | 606 Walnut Ter, Leicester    | 1987-12-11 | M    | Software Developer | D7     |
++-------+---------+-----------+------------------------------+------------+------+--------------------+--------+
+10 rows in set (0.005 sec)
+
+MariaDB [Projects]> SELECT * FROM Project;
++--------+--------------------------------+--------+
+| projNo | projName                       | deptNo |
++--------+--------------------------------+--------+
+| P10    | Fiscal Q3 Audit Prep           | D10    |
+| P2     | Talent Acquisition 2026        | D2     |
+| P3     | E-Commerce Platform Redesign   | D3     |
+| P4     | Predictive Market Analytics    | D4     |
+| P5     | Agile Workflow Optimization    | D5     |
+| P6     | Automated Regression Testing   | D6     |
+| P7     | Cloud Infrastructure Migration | D7     |
+| P8     | Next-Gen Core Engine R&D       | D8     |
+| P9     | Global Brand Campaign          | D9     |
+| SCCS   | Corporate Restructuring        | D1     |
++--------+--------------------------------+--------+
+10 rows in set (0.002 sec)
+
+MariaDB [Projects]> SELECT * FROM WorksOn;
++-------+--------+------------+-------------+
+| empNo | projNo | dateWorked | hoursWorked |
++-------+--------+------------+-------------+
+| E1    | SCCS   | 2026-06-01 |          35 |
+| E10   | P10    | 2026-06-05 |          10 |
+| E2    | P2     | 2026-06-01 |          40 |
+| E3    | P3     | 2026-06-02 |          38 |
+| E4    | P5     | 2026-06-02 |          20 |
+| E5    | P4     | 2026-06-03 |          15 |
+| E6    | P8     | 2026-06-03 |          40 |
+| E7    | P6     | 2026-06-04 |          30 |
+| E8    | P9     | 2026-06-04 |          25 |
+| E9    | P7     | 2026-06-05 |          40 |
++-------+--------+------------+-------------+
+10 rows in set (0.002 sec)
+
+
+
+MariaDB [Projects]> CREATE VIEW FemaleManagersProjects AS SELECT projNo,projName,Project.deptNo, fName,lName FROM Project JOIN Department ON Project.deptNo=Department.deptNo JOIN Employee ON Department.mgrEmpNo=Employee.empNo WHERE Employee.sex='F' ORDER BY Project.projNo;
+Query OK, 0 rows affected (0.044 sec)
+
+MariaDB [Projects]> SELECT * FROM FemaleManagersProjects;
++--------+-----------------------------+--------+--------+-----------+
+| projNo | projName                    | deptNo | fName  | lName     |
++--------+-----------------------------+--------+--------+-----------+
+| P10    | Fiscal Q3 Audit Prep        | D10    | Julia  | Roberts   |
+| P5     | Agile Workflow Optimization | D5     | Diana  | Prince    |
+| P8     | Next-Gen Core Engine R&D    | D8     | Fiona  | Gallagher |
+| P9     | Global Brand Campaign       | D9     | Hannah | Abbott    |
+| SCCS   | Corporate Restructuring     | D1     | Alice  | Smith     |
++--------+-----------------------------+--------+--------+-----------+
+5 rows in set (0.003 sec)
+
+
+MariaDB [Projects]> CREATE VIEW EmployeeProjectHours AS SELECT e.empNo, e.fName, e.lName, p.projName, w.hoursWorked FROM Employee e JOIN WorksOn w ON e.empNo=w.empNo JOIN Project p ON p.projNo=w.projNo;
+Query OK, 0 rows affected (0.034 sec)
+
+
+MariaDB [Projects]> SELECT * FROM EmployeeProjectHours;
++-------+---------+-----------+--------------------------------+-------------+
+| empNo | fName   | lName     | projName                       | hoursWorked |
++-------+---------+-----------+--------------------------------+-------------+
+| E1    | Alice   | Smith     | Corporate Restructuring        |          35 |
+| E10   | Julia   | Roberts   | Fiscal Q3 Audit Prep           |          10 |
+| E2    | Bob     | Jones     | Talent Acquisition 2026        |          40 |
+| E3    | Charlie | Brown     | E-Commerce Platform Redesign   |          38 |
+| E4    | Diana   | Prince    | Agile Workflow Optimization    |          20 |
+| E5    | Evan    | Wright    | Predictive Market Analytics    |          15 |
+| E6    | Fiona   | Gallagher | Next-Gen Core Engine R&D       |          40 |
+| E7    | George  | Clark     | Automated Regression Testing   |          30 |
+| E8    | Hannah  | Abbott    | Global Brand Campaign          |          25 |
+| E9    | Ian     | Malcolm   | Cloud Infrastructure Migration |          40 |
++-------+---------+-----------+--------------------------------+-------------+
+10 rows in set (0.038 sec)
+
+
+MariaDB [Projects]> CREATE VIEW EmpProject(empNo,projNo,totalHours) AS SELECT w.empNo,w.projNo,SUM(hoursWorked) FROM Employee e, Project p, WorksOn w WHERE e.empNo=w.empNo AND p.projNo=w.projNo GROUP BY w.empNo,w.projNo;
+Query OK, 0 rows affected (0.045 sec)
+
+MariaDB [Projects]> SELECT * FROM EmpProject;
++-------+--------+------------+
+| empNo | projNo | totalHours |
++-------+--------+------------+
+| E1    | SCCS   |         35 |
+| E10   | P10    |         10 |
+| E2    | P2     |         40 |
+| E3    | P3     |         38 |
+| E4    | P5     |         20 |
+| E5    | P4     |         15 |
+| E6    | P8     |         40 |
+| E7    | P6     |         30 |
+| E8    | P9     |         25 |
+| E9    | P7     |         40 |
++-------+--------+------------+
+10 rows in set (0.039 sec)
+
+
+MariaDB [Projects]> SELECT projNo FROM EmpProject WHERE projNo='SCCS';
++--------+
+| projNo |
++--------+
+| SCCS   |
++--------+
+1 row in set (0.041 sec)
+
+
+MariaDB [Projects]> SELECT COUNT(projNo) FROM EmpProject WHERE empNo='E1';
++---------------+
+| COUNT(projNo) |
++---------------+
+|             1 |
++---------------+
+1 row in set (0.039 sec)
+
+MariaDB [Projects]> SELECT empNo, totalHours FROM EmpProject GROUP BY empNo;
++-------+------------+
+| empNo | totalHours |
++-------+------------+
+| E1    |         35 |
+| E10   |         10 |
+| E2    |         40 |
+| E3    |         38 |
+| E4    |         20 |
+| E5    |         15 |
+| E6    |         40 |
+| E7    |         30 |
+| E8    |         25 |
+| E9    |         40 |
++-------+------------+
+10 rows in set (0.011 sec)
+
+
+Geneal(7.28)
+Answer: A materialized view stores the query result and must be updated whenever the Part table changes and if a new row is inserted or updated so that partCost becomes greater than £1000, the partNo can be added to the view without accessing the base table. However, if an existing row is deleted or its partCost is less than or equal to £1000, the Part table must be checked to see if another contract for the same partNo still has a cost above £1000. If so, the part remains in the view; otherwise, it is removed.
+
